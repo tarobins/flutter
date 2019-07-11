@@ -152,6 +152,8 @@ void main() {
     expect(e.attached, false);
     expect(childManager.itemPositions, contains(
         SliverChildPosition(index: 0, itemLeadingEdge: 0.0, itemTrailingEdge: 2.0/3.0)));
+    expect(childManager.itemPositions, contains(
+        SliverChildPosition(index: 1, itemLeadingEdge: 2.0/3.0, itemTrailingEdge: 4.0/3.0)));
 
     // make sure that layout is stable by laying out again
     inner.markNeedsLayout();
