@@ -110,9 +110,8 @@ abstract class RenderSliverBoxChildManager {
   void didStartLayout() { }
 
   /// Called at the end of layout to indicate that layout is now complete along
-  /// with the [itemPosition] of each item within the sliver that is visible
-  /// to the user.
-  void didFinishLayout(Iterable<ItemPosition> itemPositions) { }
+  /// with the [itemPosition] of each item within the sliver that is laid out.
+  void didFinishLayout(Iterable<SliverChildPosition> itemPositions) { }
 
   /// In debug mode, asserts that this manager is not expecting any
   /// modifications to the [RenderSliverMultiBoxAdaptor]'s child list.
@@ -126,27 +125,31 @@ abstract class RenderSliverBoxChildManager {
 }
 
 /// The position of a item within a [RenderSliverMultiBoxAdaptor].
-class ItemPosition {
+class SliverChildPosition {
   /// Index of the item.
   final int index;
 
-  /// Distance in pixels from the leading edge of the item to the leading edge
-  /// of the sliver.
+  /// Distance as a proportion of the length of the viewport from the leading
+  /// edge of the viewport to the leading edge of the item.
   final double itemLeadingEdge;
-  /// Distance in pixels from the trailing edge of the item to the leading edge
-  /// of the sliver.
+  /// Distance as a proportion of the length of the viewport from the leading
+  /// edge of the viewport to the trailing edge of the item.
   final double itemTrailingEdge;
 
-  ItemPosition({@required this.index, @required this.itemLeadingEdge, @required this.itemTrailingEdge});
+  SliverChildPosition({@required this.index, @required this.itemLeadingEdge, @required this.itemTrailingEdge});
 
   @override
   bool operator ==(dynamic other) {
     if (other.runtimeType != runtimeType)
       return false;
-    final ItemPosition otherPosition = other;
+    final SliverChildPosition otherPosition = other;
     return otherPosition.index == index
-        && otherPosition.itemLeadingEdge == itemLeadingEdge;
+        && otherPosition.itemLeadingEdge == itemLeadingEdge
+        && otherPosition.itemTrailingEdge == itemTrailingEdge;
   }
+
+  @override
+  String toString() => 'SliverChildPosition(index: $index, itemLeadingEdge: $itemLeadingEdge, itemTrailingEdge: $itemTrailingEdge)';
 }
 
 /// Parent data structure used by [RenderSliverWithKeepAliveMixin].

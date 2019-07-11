@@ -44,6 +44,7 @@ class RenderSliverList extends RenderSliverMultiBoxAdaptor {
 
   @override
   void performLayout() {
+    print('hello');
     childManager.didStartLayout();
     childManager.setDidUnderflow(false);
 
@@ -89,6 +90,8 @@ class RenderSliverList extends RenderSliverMultiBoxAdaptor {
     // this range, the children have consecutive indices. Outside this range,
     // it's possible for a child to get removed without notice.
     RenderBox leadingChildWithLayout, trailingChildWithLayout;
+
+    final childrenData = <SliverChildPosition>[];
 
     // Find the last child that is at or before the scrollOffset.
     RenderBox earliestUsefulChild = firstChild;
@@ -176,6 +179,12 @@ class RenderSliverList extends RenderSliverMultiBoxAdaptor {
     RenderBox child = earliestUsefulChild;
     int index = indexOf(child);
     double endScrollOffset = childScrollOffset(child) + paintExtentOf(child);
+    
+    childrenData.add(SliverChildPosition(
+        index: index,
+        itemLeadingEdge: childScrollOffset(child) / constraints.viewportMainAxisExtent,
+        itemTrailingEdge: endScrollOffset / constraints.viewportMainAxisExtent));
+    
     bool advance() { // returns true if we advanced, false if we have no more children
       // This function is used in two different places below, to avoid code duplication.
       assert(child != null);
@@ -289,6 +298,6 @@ class RenderSliverList extends RenderSliverMultiBoxAdaptor {
     // expose a new child.
     if (estimatedMaxScrollOffset == endScrollOffset)
       childManager.setDidUnderflow(true);
-    childManager.didFinishLayout(null);
+    childManager.didFinishLayout(childrenData);
   }
 }
