@@ -109,8 +109,10 @@ abstract class RenderSliverBoxChildManager {
   /// occur.
   void didStartLayout() { }
 
-  /// Called at the end of layout to indicate that layout is now complete.
-  void didFinishLayout() { }
+  /// Called at the end of layout to indicate that layout is now complete along
+  /// with the [itemPosition] of each item within the sliver that is visible
+  /// to the user.
+  void didFinishLayout(Iterable<ItemPosition> itemPositions) { }
 
   /// In debug mode, asserts that this manager is not expecting any
   /// modifications to the [RenderSliverMultiBoxAdaptor]'s child list.
@@ -122,6 +124,31 @@ abstract class RenderSliverBoxChildManager {
   /// true without making any assertions.
   bool debugAssertChildListLocked() => true;
 }
+
+/// The position of a item within a [RenderSliverMultiBoxAdaptor].
+class ItemPosition {
+  /// Index of the item.
+  final int index;
+
+  /// Distance in pixels from the leading edge of the item to the leading edge
+  /// of the sliver.
+  final double itemLeadingEdge;
+  /// Distance in pixels from the trailing edge of the item to the leading edge
+  /// of the sliver.
+  final double itemTrailingEdge;
+
+  ItemPosition({@required this.index, @required this.itemLeadingEdge, @required this.itemTrailingEdge});
+
+  @override
+  bool operator ==(dynamic other) {
+    if (other.runtimeType != runtimeType)
+      return false;
+    final ItemPosition otherPosition = other;
+    return otherPosition.index == index
+        && otherPosition.itemLeadingEdge == itemLeadingEdge;
+  }
+}
+
 /// Parent data structure used by [RenderSliverWithKeepAliveMixin].
 mixin KeepAliveParentDataMixin implements ParentData {
   /// Whether to keep the child alive even when it is no longer visible.

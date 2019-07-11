@@ -182,7 +182,7 @@ abstract class RenderSliverFixedExtentBoxAdaptor extends RenderSliverMultiBoxAda
           scrollExtent: max,
           maxPaintExtent: max,
         );
-        childManager.didFinishLayout();
+        childManager.didFinishLayout(null);
         return;
       }
     }
@@ -275,7 +275,7 @@ abstract class RenderSliverFixedExtentBoxAdaptor extends RenderSliverMultiBoxAda
     // expose a new child.
     if (estimatedMaxScrollOffset == trailingScrollOffset)
       childManager.setDidUnderflow(true);
-    childManager.didFinishLayout();
+    childManager.didFinishLayout(null);
   }
 }
 

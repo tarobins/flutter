@@ -1265,7 +1265,7 @@ class SliverMultiBoxAdaptorElement extends RenderObjectElement implements Render
   }
 
   @override
-  void didFinishLayout() {
+  void didFinishLayout(Iterable<ItemPosition> itemPositions) {
     assert(debugAssertChildListLocked());
     final int firstIndex = _childElements.firstKey() ?? 0;
     final int lastIndex = _childElements.lastKey() ?? 0;

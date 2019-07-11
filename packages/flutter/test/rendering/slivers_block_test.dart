@@ -17,6 +17,7 @@ class TestRenderSliverBoxChildManager extends RenderSliverBoxChildManager {
 
   RenderSliverList _renderObject;
   List<RenderBox> children;
+  List<ItemPosition> itemPositions;
 
   RenderSliverList createRenderObject() {
     assert(_renderObject == null);
@@ -67,6 +68,11 @@ class TestRenderSliverBoxChildManager extends RenderSliverBoxChildManager {
 
   @override
   void setDidUnderflow(bool value) { }
+
+  @override
+  void didFinishLayout(Iterable<ItemPosition> itemPositions) {
+    this.itemPositions = itemPositions;
+  }
 }
 
 class ViewportOffsetSpy extends ViewportOffset {
@@ -144,6 +150,7 @@ void main() {
     expect(c.attached, false);
     expect(d.attached, false);
     expect(e.attached, false);
+//    expect()
 
     // make sure that layout is stable by laying out again
     inner.markNeedsLayout();
