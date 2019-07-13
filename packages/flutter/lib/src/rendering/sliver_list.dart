@@ -179,11 +179,13 @@ class RenderSliverList extends RenderSliverMultiBoxAdaptor {
     RenderBox child = earliestUsefulChild;
     int index = indexOf(child);
     double endScrollOffset = childScrollOffset(child) + paintExtentOf(child);
-    
-    childrenData.add(SliverChildPosition(
+
+    SliverChildPosition currentChildPosition() => SliverChildPosition(
         index: index,
-        itemLeadingEdge: childScrollOffset(child) / constraints.viewportMainAxisExtent,
-        itemTrailingEdge: endScrollOffset / constraints.viewportMainAxisExtent));
+        itemLeadingEdge: (childScrollOffset(child) - scrollOffset) / constraints.viewportMainAxisExtent,
+        itemTrailingEdge: (endScrollOffset - scrollOffset) / constraints.viewportMainAxisExtent);
+    
+    childrenData.add(currentChildPosition());
     
     bool advance() { // returns true if we advanced, false if we have no more children
       // This function is used in two different places below, to avoid code duplication.
@@ -216,16 +218,14 @@ class RenderSliverList extends RenderSliverMultiBoxAdaptor {
       childParentData.layoutOffset = endScrollOffset;
       assert(childParentData.index == index);
       endScrollOffset = childScrollOffset(child) + paintExtentOf(child);
-      childrenData.add(SliverChildPosition(
-          index: index,
-          itemLeadingEdge: childScrollOffset(child) / constraints.viewportMainAxisExtent,
-          itemTrailingEdge: endScrollOffset / constraints.viewportMainAxisExtent));
+      childrenData.add(currentChildPosition());
       return true;
     }
 
     // Find the first child that ends after the scroll offset.
     while (endScrollOffset < scrollOffset) {
       leadingGarbage += 1;
+      childrenData.removeLast();
       if (!advance()) {
         assert(leadingGarbage == childCount);
         assert(child == null);
