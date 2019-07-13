@@ -218,7 +218,9 @@ class RenderSliverList extends RenderSliverMultiBoxAdaptor {
       childParentData.layoutOffset = endScrollOffset;
       assert(childParentData.index == index);
       endScrollOffset = childScrollOffset(child) + paintExtentOf(child);
+
       childrenData.add(currentChildPosition());
+
       return true;
     }
 
