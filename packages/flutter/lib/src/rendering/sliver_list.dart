@@ -34,12 +34,19 @@ import 'sliver_multi_box_adaptor.dart';
 ///    the same extent in the main axis.
 ///  * [RenderSliverGrid], which places its children in arbitrary positions.
 class RenderSliverList extends RenderSliverMultiBoxAdaptor {
+
+  /// To be called whenever the set or position of laid out children changes.
+  /// May be null, in which case it should not be called.
+  // TODO(tarobins): Move to parent class.
+  final ItemPositionCallback itemPositionCallback;
+
   /// Creates a sliver that places multiple box children in a linear array along
   /// the main axis.
   ///
   /// The [childManager] argument must not be null.
   RenderSliverList({
     @required RenderSliverBoxChildManager childManager,
+    this.itemPositionCallback,
   }) : super(childManager: childManager);
 
   @override
@@ -78,7 +85,7 @@ class RenderSliverList extends RenderSliverMultiBoxAdaptor {
       if (!addInitialChild()) {
         // There are no children.
         geometry = SliverGeometry.zero;
-        childManager.didFinishLayout(null);
+        childManager.didFinishLayout();
         return;
       }
     }
@@ -303,6 +310,7 @@ class RenderSliverList extends RenderSliverMultiBoxAdaptor {
     // expose a new child.
     if (estimatedMaxScrollOffset == endScrollOffset)
       childManager.setDidUnderflow(true);
-    childManager.didFinishLayout(childrenData);
+    itemPositionCallback?.call(childrenData);
+    childManager.didFinishLayout();
   }
 }

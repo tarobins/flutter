@@ -547,7 +547,7 @@ class RenderSliverGrid extends RenderSliverMultiBoxAdaptor {
           scrollExtent: max,
           maxPaintExtent: max,
         );
-        childManager.didFinishLayout(null);
+        childManager.didFinishLayout();
         return;
       }
     }
@@ -636,6 +636,6 @@ class RenderSliverGrid extends RenderSliverMultiBoxAdaptor {
     // would not expose a new child.
     if (estimatedTotalExtent == trailingScrollOffset)
       childManager.setDidUnderflow(true);
-    childManager.didFinishLayout(null);
+    childManager.didFinishLayout();
   }
 }

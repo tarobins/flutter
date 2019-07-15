@@ -109,9 +109,8 @@ abstract class RenderSliverBoxChildManager {
   /// occur.
   void didStartLayout() { }
 
-  /// Called at the end of layout to indicate that layout is now complete along
-  /// with the [itemPosition] of each item within the sliver that is laid out.
-  void didFinishLayout(Iterable<SliverChildPosition> itemPositions) { }
+  /// Called at the end of layout to indicate that layout is now complete.
+  void didFinishLayout() { }
 
   /// In debug mode, asserts that this manager is not expecting any
   /// modifications to the [RenderSliverMultiBoxAdaptor]'s child list.
@@ -122,34 +121,6 @@ abstract class RenderSliverBoxChildManager {
   /// to the [RenderSliverMultiBoxAdaptor]'s child list and can simply return
   /// true without making any assertions.
   bool debugAssertChildListLocked() => true;
-}
-
-/// The position of a item within a [RenderSliverMultiBoxAdaptor].
-class SliverChildPosition {
-  /// Index of the item.
-  final int index;
-
-  /// Distance as a proportion of the length of the viewport from the leading
-  /// edge of the viewport to the leading edge of the item.
-  final double itemLeadingEdge;
-  /// Distance as a proportion of the length of the viewport from the leading
-  /// edge of the viewport to the trailing edge of the item.
-  final double itemTrailingEdge;
-
-  SliverChildPosition({@required this.index, @required this.itemLeadingEdge, @required this.itemTrailingEdge});
-
-  @override
-  bool operator ==(dynamic other) {
-    if (other.runtimeType != runtimeType)
-      return false;
-    final SliverChildPosition otherPosition = other;
-    return otherPosition.index == index
-        && otherPosition.itemLeadingEdge == itemLeadingEdge
-        && otherPosition.itemTrailingEdge == itemTrailingEdge;
-  }
-
-  @override
-  String toString() => 'SliverChildPosition(index: $index, itemLeadingEdge: $itemLeadingEdge, itemTrailingEdge: $itemTrailingEdge)';
 }
 
 /// Parent data structure used by [RenderSliverWithKeepAliveMixin].
@@ -187,6 +158,38 @@ class SliverMultiBoxAdaptorParentData extends SliverLogicalParentData with Conta
   @override
   String toString() => 'index=$index; ${keepAlive == true ? "keepAlive; " : ""}${super.toString()}';
 }
+
+/// The position of a item within a [RenderSliverMultiBoxAdaptor].
+class SliverChildPosition {
+  /// Index of the item.
+  final int index;
+
+  /// Distance as a proportion of the length of the viewport from the leading
+  /// edge of the viewport to the leading edge of the item.
+  final double itemLeadingEdge;
+  /// Distance as a proportion of the length of the viewport from the leading
+  /// edge of the viewport to the trailing edge of the item.
+  final double itemTrailingEdge;
+
+  SliverChildPosition({@required this.index, @required this.itemLeadingEdge, @required this.itemTrailingEdge});
+
+  @override
+  bool operator ==(dynamic other) {
+    if (other.runtimeType != runtimeType)
+      return false;
+    final SliverChildPosition otherPosition = other;
+    return otherPosition.index == index
+        && otherPosition.itemLeadingEdge == itemLeadingEdge
+        && otherPosition.itemTrailingEdge == itemTrailingEdge;
+  }
+
+  @override
+  String toString() => 'SliverChildPosition(index: $index, itemLeadingEdge: $itemLeadingEdge, itemTrailingEdge: $itemTrailingEdge)';
+}
+
+/// Called when the set of a position of laid out children of the
+/// RenderSliverList changes.
+typedef ItemPositionCallback = Function(Iterable<SliverChildPosition> childPositions);
 
 /// A sliver with multiple box children.
 ///
