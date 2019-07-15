@@ -165,6 +165,12 @@ abstract class RenderSliverFixedExtentBoxAdaptor extends RenderSliverMultiBoxAda
     final int targetLastIndex = targetEndScrollOffset.isFinite ?
         getMaxChildIndexForScrollOffset(targetEndScrollOffset, itemExtent) : null;
 
+//    final childrenData = <SliverChildPosition>[];
+//    SliverChildPosition currentChildPosition() => SliverChildPosition(
+//        index: index,
+//        itemLeadingEdge: (childScrollOffset(child) - scrollOffset) / constraints.viewportMainAxisExtent,
+//        itemTrailingEdge: (endScrollOffset - scrollOffset) / constraints.viewportMainAxisExtent);
+
     if (firstChild != null) {
       final int oldFirstIndex = indexOf(firstChild);
       final int oldLastIndex = indexOf(lastChild);
@@ -272,6 +278,12 @@ abstract class RenderSliverFixedExtentBoxAdaptor extends RenderSliverMultiBoxAda
         || constraints.scrollOffset > 0.0,
     );
 
+    itemPositionCallback?.call(List<SliverChildPosition>.generate(
+        lastIndex - firstIndex + 1,
+            (i) => SliverChildPosition(index: i + firstIndex, itemLeadingEdge: (leadingScrollOffset - scrollOffset + i * itemExtent) / constraints.viewportMainAxisExtent,
+                itemTrailingEdge: (leadingScrollOffset - scrollOffset + (i + 1) * itemExtent) / constraints.viewportMainAxisExtent),
+    ));
+
     // We may have started the layout while scrolled to the end, which would not
     // expose a new child.
     if (estimatedMaxScrollOffset == trailingScrollOffset)
@@ -304,7 +316,7 @@ class RenderSliverFixedExtentList extends RenderSliverFixedExtentBoxAdaptor {
   /// Creates a sliver that contains multiple box children that have a given
   /// extent in the main axis.
   ///
-  /// The [childManager] argument must not be null.
+  ///4 The [childManager] argument must not be null.
   RenderSliverFixedExtentList({
     @required RenderSliverBoxChildManager childManager,
     double itemExtent,
