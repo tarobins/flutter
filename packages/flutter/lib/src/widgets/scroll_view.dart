@@ -1128,6 +1128,7 @@ class ListView extends BoxScrollView {
       return SliverFixedExtentList(
         delegate: childrenDelegate,
         itemExtent: itemExtent,
+        itemPositionCallback: (Iterable<SliverChildPosition> itemPositions) => itemScrollController?._itemPositions?.value = itemPositions,
       );
     }
     return SliverList(

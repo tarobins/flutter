@@ -874,7 +874,7 @@ class SliverFixedExtentList extends SliverMultiBoxAdaptorWidget {
   @override
   RenderSliverFixedExtentList createRenderObject(BuildContext context) {
     final SliverMultiBoxAdaptorElement element = context;
-    return RenderSliverFixedExtentList(childManager: element, itemExtent: itemExtent);
+    return RenderSliverFixedExtentList(childManager: element, itemExtent: itemExtent, itemPositionCallback: itemPositionCallback);
   }
 
   @override

@@ -115,7 +115,9 @@ void main() {
     expect(find.text('3'), findsNothing);
     expect(find.text('4'), findsNothing);
 
-    expect(itemScrollController.itemPositions.value.length, 3);
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 0, itemLeadingEdge: 0, itemTrailingEdge: 1/3)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 1/3, itemTrailingEdge: 2/3)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 2/3, itemTrailingEdge: 1)));
 
     await tester.drag(find.byType(ListView), const Offset(0.0, -250.0));
     await tester.pump();
@@ -127,6 +129,11 @@ void main() {
     expect(find.text('4'), findsOneWidget);
     expect(find.text('5'), findsNothing);
     expect(find.text('6'), findsNothing);
+
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: -1/12, itemTrailingEdge: 1/4)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 1/4, itemTrailingEdge: 7/12)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 3, itemLeadingEdge: 7/12, itemTrailingEdge: 11/12)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 4, itemLeadingEdge: 11/12, itemTrailingEdge: 5/4)));
 
     await tester.drag(find.byType(ListView), const Offset(0.0, 200.0));
     await tester.pump();
