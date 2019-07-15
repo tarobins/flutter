@@ -4,6 +4,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter/rendering.dart';
 
 import '../rendering/mock_canvas.dart';
 
@@ -88,6 +89,8 @@ void main() {
   });
 
   testWidgets('ListView itemExtent control test', (WidgetTester tester) async {
+    ItemScrollController itemScrollController = ItemScrollController();
+
     await tester.pumpWidget(
       Directionality(
         textDirection: TextDirection.ltr,
@@ -98,6 +101,7 @@ void main() {
               child: Text('$i'),
             );
           }),
+          itemScrollController: itemScrollController,
         ),
       ),
     );
@@ -110,6 +114,8 @@ void main() {
     expect(find.text('2'), findsOneWidget);
     expect(find.text('3'), findsNothing);
     expect(find.text('4'), findsNothing);
+
+    expect(itemScrollController.itemPositions.value.length, 3);
 
     await tester.drag(find.byType(ListView), const Offset(0.0, -250.0));
     await tester.pump();

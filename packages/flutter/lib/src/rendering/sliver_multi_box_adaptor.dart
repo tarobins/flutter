@@ -184,6 +184,9 @@ class SliverChildPosition {
   }
 
   @override
+  int get hashCode => 31 * (31 * (7 + index.hashCode) + itemLeadingEdge.hashCode) + itemTrailingEdge.hashCode;
+
+  @override
   String toString() => 'SliverChildPosition(index: $index, itemLeadingEdge: $itemLeadingEdge, itemTrailingEdge: $itemTrailingEdge)';
 }
 
@@ -225,6 +228,7 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
   /// The [childManager] argument must not be null.
   RenderSliverMultiBoxAdaptor({
     @required RenderSliverBoxChildManager childManager,
+    this.itemPositionCallback,
   }) : assert(childManager != null),
        _childManager = childManager {
     assert(() {
@@ -232,6 +236,10 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
       return true;
     }());
   }
+
+  /// To be called whenever the set or position of laid out children changes.
+  /// May be null, in which case it should not be called.
+  final ItemPositionCallback itemPositionCallback;
 
   @override
   void setupParentData(RenderObject child) {

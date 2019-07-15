@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/foundation.dart';
 
 import 'basic.dart';
 import 'framework.dart';
@@ -561,6 +562,12 @@ abstract class BoxScrollView extends ScrollView {
   }
 }
 
+class ItemScrollController {
+  final ValueNotifier<Iterable<SliverChildPosition>> _itemPositions = ValueNotifier([]);
+
+  ValueListenable<Iterable<SliverChildPosition>> get itemPositions => _itemPositions;
+}
+
 /// A scrollable list of widgets arranged linearly.
 ///
 /// [ListView] is the most commonly used scrolling widget. It displays its
@@ -837,6 +844,8 @@ abstract class BoxScrollView extends ScrollView {
 ///  * [ScrollNotification] and [NotificationListener], which can be used to watch
 ///    the scroll position without using a [ScrollController].
 class ListView extends BoxScrollView {
+  final ItemScrollController itemScrollController;
+
   /// Creates a scrollable, linear array of widgets from an explicit [List].
   ///
   /// This constructor is appropriate for list views with a small number of
@@ -859,6 +868,7 @@ class ListView extends BoxScrollView {
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     ScrollController controller,
+    this.itemScrollController,
     bool primary,
     ScrollPhysics physics,
     bool shrinkWrap = false,
@@ -922,6 +932,7 @@ class ListView extends BoxScrollView {
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     ScrollController controller,
+    this.itemScrollController,
     bool primary,
     ScrollPhysics physics,
     bool shrinkWrap = false,
@@ -1008,6 +1019,7 @@ class ListView extends BoxScrollView {
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     ScrollController controller,
+    this.itemScrollController,
     bool primary,
     ScrollPhysics physics,
     bool shrinkWrap = false,
@@ -1070,6 +1082,7 @@ class ListView extends BoxScrollView {
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     ScrollController controller,
+    this.itemScrollController,
     bool primary,
     ScrollPhysics physics,
     bool shrinkWrap = false,
@@ -1117,7 +1130,10 @@ class ListView extends BoxScrollView {
         itemExtent: itemExtent,
       );
     }
-    return SliverList(delegate: childrenDelegate);
+    return SliverList(
+      delegate: childrenDelegate,
+      itemPositionCallback: (Iterable<SliverChildPosition> itemPositions) => itemScrollController?._itemPositions?.value = itemPositions,
+    );
   }
 
   @override

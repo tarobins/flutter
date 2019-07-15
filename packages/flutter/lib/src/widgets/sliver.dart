@@ -710,10 +710,13 @@ abstract class SliverWithKeepAliveWidget extends RenderObjectWidget {
 ///
 /// Helps subclasses build their children lazily using a [SliverChildDelegate].
 abstract class SliverMultiBoxAdaptorWidget extends SliverWithKeepAliveWidget {
+  final ItemPositionCallback itemPositionCallback;
+
   /// Initializes fields for subclasses.
   const SliverMultiBoxAdaptorWidget({
     Key key,
     @required this.delegate,
+    this.itemPositionCallback,
   }) : assert(delegate != null),
        super(key: key);
 
@@ -801,12 +804,13 @@ class SliverList extends SliverMultiBoxAdaptorWidget {
   const SliverList({
     Key key,
     @required SliverChildDelegate delegate,
-  }) : super(key: key, delegate: delegate);
+    ItemPositionCallback itemPositionCallback,
+  }) : super(key: key, delegate: delegate, itemPositionCallback: itemPositionCallback);
 
   @override
   RenderSliverList createRenderObject(BuildContext context) {
     final SliverMultiBoxAdaptorElement element = context;
-    return RenderSliverList(childManager: element);
+    return RenderSliverList(childManager: element, itemPositionCallback: itemPositionCallback);
   }
 }
 
@@ -861,7 +865,8 @@ class SliverFixedExtentList extends SliverMultiBoxAdaptorWidget {
     Key key,
     @required SliverChildDelegate delegate,
     @required this.itemExtent,
-  }) : super(key: key, delegate: delegate);
+    ItemPositionCallback itemPositionCallback,
+  }) : super(key: key, delegate: delegate, itemPositionCallback: itemPositionCallback);
 
   /// The extent the children are forced to have in the main axis.
   final double itemExtent;
