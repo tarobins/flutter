@@ -89,7 +89,7 @@ void main() {
   });
 
   testWidgets('ListView itemExtent control test', (WidgetTester tester) async {
-    ItemScrollController itemScrollController = ItemScrollController();
+    ItemPositionNotifier itemScrollController = ItemPositionNotifier();
 
     await tester.pumpWidget(
       Directionality(

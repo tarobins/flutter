@@ -11,7 +11,7 @@ void main() {
     tester.binding.window.physicalSizeTestValue = const Size(200.0, 200.0);
     tester.binding.window.devicePixelRatioTestValue = 1.0;
 
-    final ItemScrollController itemScrollController = ItemScrollController();
+    final ItemPositionNotifier itemScrollController = ItemPositionNotifier();
 
     await tester.pumpWidget(
       Directionality(
@@ -38,7 +38,7 @@ void main() {
     tester.binding.window.physicalSizeTestValue = const Size(200.0, 200.0);
     tester.binding.window.devicePixelRatioTestValue = 1.0;
 
-    final ItemScrollController itemScrollController = ItemScrollController();
+    final ItemPositionNotifier itemScrollController = ItemPositionNotifier();
 
     await tester.pumpWidget(
       Directionality(

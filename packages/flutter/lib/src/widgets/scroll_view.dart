@@ -562,7 +562,7 @@ abstract class BoxScrollView extends ScrollView {
   }
 }
 
-class ItemScrollController {
+class ItemPositionNotifier {
   final ValueNotifier<Iterable<SliverChildPosition>> _itemPositions = ValueNotifier([]);
 
   ValueListenable<Iterable<SliverChildPosition>> get itemPositions => _itemPositions;
@@ -844,7 +844,7 @@ class ItemScrollController {
 ///  * [ScrollNotification] and [NotificationListener], which can be used to watch
 ///    the scroll position without using a [ScrollController].
 class ListView extends BoxScrollView {
-  final ItemScrollController itemScrollController;
+  final ItemPositionNotifier itemScrollController;
 
   /// Creates a scrollable, linear array of widgets from an explicit [List].
   ///
