@@ -7,7 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 void main() {
-  testWidgets('init', (WidgetTester tester) async {
+  testWidgets('List positions of unscrolled list', (WidgetTester tester) async {
     tester.binding.window.physicalSizeTestValue = const Size(200.0, 200.0);
     tester.binding.window.devicePixelRatioTestValue = 1.0;
 
@@ -28,9 +28,6 @@ void main() {
         ),
       ),
     );
-
-    expect(find.text('Item 0'), findsOneWidget);
-    expect(find.text('Item 10'), findsNothing);
 
     expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 0, itemLeadingEdge: 0, itemTrailingEdge: 0.1)));
     expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 0.1, itemTrailingEdge: 0.3)));
