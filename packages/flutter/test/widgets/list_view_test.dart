@@ -101,7 +101,7 @@ void main() {
               child: Text('$i'),
             );
           }),
-          itemScrollController: itemScrollController,
+          itemPositionNotifier: itemScrollController,
         ),
       ),
     );

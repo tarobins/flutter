@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:math' as math;
+import 'dart:async';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/gestures.dart';
@@ -844,7 +845,7 @@ class ItemPositionNotifier {
 ///  * [ScrollNotification] and [NotificationListener], which can be used to watch
 ///    the scroll position without using a [ScrollController].
 class ListView extends BoxScrollView {
-  final ItemPositionNotifier itemScrollController;
+  final ItemPositionNotifier itemPositionNotifier;
 
   /// Creates a scrollable, linear array of widgets from an explicit [List].
   ///
@@ -868,7 +869,7 @@ class ListView extends BoxScrollView {
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     ScrollController controller,
-    this.itemScrollController,
+    this.itemPositionNotifier,
     bool primary,
     ScrollPhysics physics,
     bool shrinkWrap = false,
@@ -932,7 +933,7 @@ class ListView extends BoxScrollView {
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     ScrollController controller,
-    this.itemScrollController,
+    this.itemPositionNotifier,
     bool primary,
     ScrollPhysics physics,
     bool shrinkWrap = false,
@@ -1019,7 +1020,7 @@ class ListView extends BoxScrollView {
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     ScrollController controller,
-    this.itemScrollController,
+    this.itemPositionNotifier,
     bool primary,
     ScrollPhysics physics,
     bool shrinkWrap = false,
@@ -1082,7 +1083,7 @@ class ListView extends BoxScrollView {
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     ScrollController controller,
-    this.itemScrollController,
+    this.itemPositionNotifier,
     bool primary,
     ScrollPhysics physics,
     bool shrinkWrap = false,
@@ -1128,12 +1129,12 @@ class ListView extends BoxScrollView {
       return SliverFixedExtentList(
         delegate: childrenDelegate,
         itemExtent: itemExtent,
-        itemPositionCallback: (Iterable<SliverChildPosition> itemPositions) => itemScrollController?._itemPositions?.value = itemPositions,
+        itemPositionCallback: (Iterable<SliverChildPosition> itemPositions) => scheduleMicrotask(() => itemPositionNotifier?._itemPositions?.value = itemPositions),
       );
     }
     return SliverList(
       delegate: childrenDelegate,
-      itemPositionCallback: (Iterable<SliverChildPosition> itemPositions) => itemScrollController?._itemPositions?.value = itemPositions,
+      itemPositionCallback: (Iterable<SliverChildPosition> itemPositions) => scheduleMicrotask(() => itemPositionNotifier?._itemPositions?.value = itemPositions),
     );
   }
 

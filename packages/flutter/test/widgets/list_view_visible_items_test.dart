@@ -24,7 +24,7 @@ void main() {
               child: Text('Item $i'),
             ),
           ),
-        itemScrollController: itemScrollController,
+        itemPositionNotifier: itemScrollController,
         ),
       ),
     );
@@ -51,7 +51,7 @@ void main() {
               child: Text('Item $i'),
             ),
           ),
-          itemScrollController: itemScrollController,
+          itemPositionNotifier: itemScrollController,
         ),
       ),
     );
@@ -79,7 +79,7 @@ void main() {
             height: (i + 1) * 20.0,
             child: Text('Item $i'),
           ),
-          itemScrollController: itemScrollController,
+          itemPositionNotifier: itemScrollController,
         ),
       ),
     );
