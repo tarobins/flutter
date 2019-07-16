@@ -182,8 +182,8 @@ class RenderSliverList extends RenderSliverMultiBoxAdaptor {
 
     SliverChildPosition currentChildPosition() => SliverChildPosition(
         index: index,
-        itemLeadingEdge: (childScrollOffset(child) - scrollOffset) / constraints.viewportMainAxisExtent,
-        itemTrailingEdge: (endScrollOffset - scrollOffset) / constraints.viewportMainAxisExtent);
+        itemLeadingEdge: (childScrollOffset(child) - constraints.scrollOffset) / constraints.viewportMainAxisExtent,
+        itemTrailingEdge: (endScrollOffset - constraints.scrollOffset) / constraints.viewportMainAxisExtent);
     
     childrenData.add(currentChildPosition());
     
