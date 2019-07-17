@@ -16,13 +16,11 @@ void main() {
     await tester.pumpWidget(
       Directionality(
         textDirection: TextDirection.ltr,
-        child: ListView(
-          children: List<Widget>.generate(
-            15,
-                (int i) => SizedBox(
-              height: (i + 1) * 20.0,
-              child: Text('Item $i'),
-            ),
+        child: ListView.builder(
+          itemCount: 15,
+          itemBuilder: (BuildContext context, int i) => SizedBox(
+            height: (i + 1) * 20.0,
+            child: Text('Item $i'),
           ),
           itemPositionNotifier: itemScrollController,
         ),
