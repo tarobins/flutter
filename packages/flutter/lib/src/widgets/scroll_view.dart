@@ -869,7 +869,7 @@ class ListView extends BoxScrollView {
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     ScrollController controller,
-    this.itemPositionNotifier,
+    ItemPositionNotifier itemPositionNotifier,
     bool primary,
     ScrollPhysics physics,
     bool shrinkWrap = false,
@@ -888,6 +888,7 @@ class ListView extends BoxScrollView {
          addRepaintBoundaries: addRepaintBoundaries,
          addSemanticIndexes: addSemanticIndexes,
        ),
+       itemPositionNotifier = itemPositionNotifier ?? ItemPositionNotifier(),
        super(
          key: key,
          scrollDirection: scrollDirection,
@@ -933,7 +934,7 @@ class ListView extends BoxScrollView {
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     ScrollController controller,
-    this.itemPositionNotifier,
+    ItemPositionNotifier itemPositionNotifier,
     bool primary,
     ScrollPhysics physics,
     bool shrinkWrap = false,
@@ -954,6 +955,7 @@ class ListView extends BoxScrollView {
          addRepaintBoundaries: addRepaintBoundaries,
          addSemanticIndexes: addSemanticIndexes,
        ),
+       itemPositionNotifier = itemPositionNotifier ?? ItemPositionNotifier(),
        super(
          key: key,
          scrollDirection: scrollDirection,
@@ -1020,7 +1022,7 @@ class ListView extends BoxScrollView {
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     ScrollController controller,
-    this.itemPositionNotifier,
+    ItemPositionNotifier itemPositionNotifier,
     bool primary,
     ScrollPhysics physics,
     bool shrinkWrap = false,
@@ -1061,6 +1063,7 @@ class ListView extends BoxScrollView {
            return index.isEven ? index ~/ 2 : null;
          },
        ),
+       itemPositionNotifier = itemPositionNotifier ?? ItemPositionNotifier(),
        super(
          key: key,
          scrollDirection: scrollDirection,
@@ -1093,6 +1096,7 @@ class ListView extends BoxScrollView {
     double cacheExtent,
     int semanticChildCount,
   }) : assert(childrenDelegate != null),
+//       itemPositionNotifier = itemPositionNotifier ?? ItemPositionNotifier(),
        super(
          key: key,
          scrollDirection: scrollDirection,
