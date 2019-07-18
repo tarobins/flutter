@@ -52,6 +52,7 @@ export 'src/widgets/implicit_animations.dart';
 export 'src/widgets/inherited_model.dart';
 export 'src/widgets/inherited_notifier.dart';
 export 'src/widgets/layout_builder.dart';
+export 'src/widgets/list_item_scroll_controller.dart';
 export 'src/widgets/list_wheel_scroll_view.dart';
 export 'src/widgets/localizations.dart';
 export 'src/widgets/media_query.dart';
