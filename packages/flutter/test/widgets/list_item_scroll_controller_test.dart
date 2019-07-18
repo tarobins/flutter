@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 const Duration animationDuration = Duration(seconds: 1);
+const int itemCount = 200;
 
 typedef ItemSize = double Function(int index);
 
@@ -31,7 +32,7 @@ void main() {
               height: itemSize(index),
               child: Text('Item $index'),
             ),
-        childCount: 15);
+        childCount: itemCount);
     listItemScrollController = ListItemScrollController(
         scrollController: scrollController, itemPositionNotifier: itemPositionNotifier, sliverChildDelegate: sliverChildBuilderDelegate);
 
@@ -56,7 +57,7 @@ void main() {
   });
 
 
-  testWidgets('Linear scroll to already onscreen of size 20 items list', (WidgetTester tester) async {
+  testWidgets('Linear scroll to already onscreen of height-20 items list', (WidgetTester tester) async {
     await setUp(tester, itemSize: _always20);
 
     listItemScrollController.animateTo(1, 0, animationDuration, Curves.linear);
@@ -64,7 +65,6 @@ void main() {
     await tester.pump();
     await tester.pump(animationDuration * 0.5);
 
-    expect(scrollController.position.pixels, 10);
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 0, itemLeadingEdge: -0.05, itemTrailingEdge: 0.05)));
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 0.05, itemTrailingEdge: 0.15)));
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.15, itemTrailingEdge: 0.25)));
@@ -73,5 +73,18 @@ void main() {
 
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 0, itemTrailingEdge: 0.1)));
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.1, itemTrailingEdge: 0.2)));
+  });
+
+
+  testWidgets('Linear scroll to not already onscreen of height-20 items list', (WidgetTester tester) async {
+    await setUp(tester, itemSize: _always20);
+
+    listItemScrollController.animateTo(20, 0, animationDuration, Curves.linear);
+
+    await tester.pump();
+    await tester.pump(animationDuration);
+
+    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 20, itemLeadingEdge: 0, itemTrailingEdge: 0.1)));
+    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 21, itemLeadingEdge: 0.1, itemTrailingEdge: 0.2)));
   });
 }
