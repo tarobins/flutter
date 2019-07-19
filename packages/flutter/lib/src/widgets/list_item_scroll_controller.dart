@@ -12,13 +12,13 @@ class ListItemScrollController {
   Future<void> animateTo(int index, double anchor, Duration duration, Curve curve) {
     final Iterable<SliverChildPosition> matchingPositions = itemPositionNotifier.itemPositions.value.where((SliverChildPosition sliverChildPosition) => sliverChildPosition.index == index);
     if (matchingPositions.isNotEmpty) {
-      return animateToOnScreenItem(matchingPositions.first, anchor, duration, curve);
+      return _animateToOnScreenItem(matchingPositions.first, anchor, duration, curve);
     } else {
-      return animateToOffScreenItem(index, anchor, duration, curve);
+      return _animateToOffScreenItem(index, anchor, duration, curve);
     }
   }
 
-  Future<void> animateToOnScreenItem(SliverChildPosition targetItemPosition, double anchor, Duration duration, Curve curve) {
+  Future<void> _animateToOnScreenItem(SliverChildPosition targetItemPosition, double anchor, Duration duration, Curve curve) {
     final double targetItemCurrentPixelEdge = targetItemPosition.itemLeadingEdge * scrollController.position.viewportDimension;
     final double targetPixelOffset = anchor * scrollController.position.viewportDimension;
 
@@ -27,7 +27,7 @@ class ListItemScrollController {
     return scrollController.animateTo(targetScrollOffset, duration: duration, curve: curve);
   }
 
-  Future<void> animateToOffScreenItem(int index, double anchor, Duration duration, Curve curve) {
+  Future<void> _animateToOffScreenItem(int index, double anchor, Duration duration, Curve curve) {
     final double averageItemHeight = itemPositionNotifier.itemPositions.value.fold(0.0, (double value, SliverChildPosition next) =>
         value + next.itemTrailingEdge - next.itemLeadingEdge) /
             itemPositionNotifier.itemPositions.value.length * scrollController.position.viewportDimension;

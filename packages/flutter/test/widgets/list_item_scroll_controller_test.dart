@@ -56,7 +56,6 @@ void main() {
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.3, itemTrailingEdge: 0.6)));
   });
 
-
   testWidgets('Linear scroll to already onscreen of height-20 items list', (WidgetTester tester) async {
     await setUp(tester, itemSize: _always20);
 
@@ -75,7 +74,6 @@ void main() {
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.1, itemTrailingEdge: 0.2)));
   });
 
-
   testWidgets('Linear scroll to not already onscreen of height-20 items list', (WidgetTester tester) async {
     await setUp(tester, itemSize: _always20);
 
@@ -86,5 +84,23 @@ void main() {
 
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 20, itemLeadingEdge: 0, itemTrailingEdge: 0.1)));
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 21, itemLeadingEdge: 0.1, itemTrailingEdge: 0.2)));
+  });
+
+  testWidgets('Linear scroll to already onscreen of varying height items list', (WidgetTester tester) async {
+    await setUp(tester, itemSize: _growBy20);
+
+    listItemScrollController.animateTo(1, 0, animationDuration, Curves.linear);
+
+    await tester.pump();
+    await tester.pump(animationDuration * 0.5);
+
+    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 0, itemLeadingEdge: -0.05, itemTrailingEdge: 0.05)));
+    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 0.05, itemTrailingEdge: 0.25)));
+    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.25, itemTrailingEdge: 0.55)));
+
+    await tester.pump(animationDuration * 0.5);
+
+    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 0, itemTrailingEdge: 0.2)));
+    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.2, itemTrailingEdge: 0.5)));
   });
 }
