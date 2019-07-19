@@ -34,6 +34,17 @@ class ListItemScrollController {
 
     final double targetScrollOffset = index * averageItemHeight;
 
-    return scrollController.animateTo(targetScrollOffset, duration: duration, curve: curve);
+    final ScrollPositionWithSingleContext scrollPosition = scrollController.position;
+    final DrivenScrollActivity scrollActivity = DrivenScrollActivity(
+      scrollPosition,
+      from: scrollPosition.pixels,
+      to: targetScrollOffset,
+      duration: duration,
+      curve: curve,
+      vsync: scrollPosition.context.vsync,
+    );
+    scrollPosition.beginActivity(scrollActivity);
+
+    return scrollActivity.done;
   }
 }
