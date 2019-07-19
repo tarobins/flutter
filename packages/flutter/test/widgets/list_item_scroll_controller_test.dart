@@ -21,6 +21,7 @@ void main() {
   ListItemScrollController listItemScrollController;
 
   double _growBy20(int index) => (index + 1) * 20.0;
+  double _growBy5(int index) => index * 5.0 + 10;
   double _always20(int index) => 20.0;
 
   Future<void> setUp(WidgetTester tester, {ItemSize itemSize}) async {
@@ -108,17 +109,15 @@ void main() {
   });
 
   testWidgets('Linear scroll to not already onscreen of varying height items list', (WidgetTester tester) async {
-    await setUp(tester, itemSize: _always20);
+    await setUp(tester, itemSize: _growBy5);
 
-    debugDumpRenderTree();
+    listItemScrollController.animateTo(30, 0, animationDuration, Curves.linear);
 
-//    listItemScrollController.animateTo(20, 0, animationDuration, Curves.linear);
-//
-//    await tester.pump();
-//    await tester.pump(animationDuration);
-//
-//    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 20, itemLeadingEdge: 0, itemTrailingEdge: 0.1)));
-//    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 21, itemLeadingEdge: 0.1, itemTrailingEdge: 0.2)));
+    await tester.pump();
+    await tester.pump(animationDuration);
+
+    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 30, itemLeadingEdge: 0, itemTrailingEdge: 160/200)));
+    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 31, itemLeadingEdge: 160/200, itemTrailingEdge: (160 + 165) / 200)));
   });
 }
 
