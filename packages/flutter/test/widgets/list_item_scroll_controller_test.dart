@@ -54,9 +54,9 @@ void main() {
   testWidgets('List positions of unscrolled list', (WidgetTester tester) async {
     await setUp(tester, itemSize: _growBy20);
 
-    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 0, itemLeadingEdge: 0, itemTrailingEdge: 0.1)));
-    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 0.1, itemTrailingEdge: 0.3)));
-    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.3, itemTrailingEdge: 0.6)));
+    expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 0, itemLeadingEdge: 0, itemTrailingEdge: 0.1), tolerance));
+    expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 1, itemLeadingEdge: 0.1, itemTrailingEdge: 0.3), tolerance));
+    expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 2, itemLeadingEdge: 0.3, itemTrailingEdge: 0.6), tolerance));
   });
 
   testWidgets('Linear scroll to already onscreen of height-20 items list', (WidgetTester tester) async {
@@ -67,14 +67,14 @@ void main() {
     await tester.pump();
     await tester.pump(animationDuration * 0.5);
 
-    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 0, itemLeadingEdge: -0.05, itemTrailingEdge: 0.05)));
-    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 0.05, itemTrailingEdge: 0.15)));
-    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.15, itemTrailingEdge: 0.25)));
+    expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 0, itemLeadingEdge: -0.05, itemTrailingEdge: 0.05), tolerance));
+    expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 1, itemLeadingEdge: 0.05, itemTrailingEdge: 0.15), tolerance));
+    expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 2, itemLeadingEdge: 0.15, itemTrailingEdge: 0.25), tolerance));
 
     await tester.pump(animationDuration * 0.5);
 
-    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 0, itemTrailingEdge: 0.1)));
-    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.1, itemTrailingEdge: 0.2)));
+    expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 1, itemLeadingEdge: 0, itemTrailingEdge: 0.1), tolerance));
+    expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 2, itemLeadingEdge: 0.1, itemTrailingEdge: 0.2), tolerance));
   });
 
   testWidgets('Linear scroll to not already onscreen of height-20 items list', (WidgetTester tester) async {
@@ -97,14 +97,14 @@ void main() {
     await tester.pump();
     await tester.pump(animationDuration * 0.5);
 
-    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 0, itemLeadingEdge: -0.05, itemTrailingEdge: 0.05)));
-    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 0.05, itemTrailingEdge: 0.25)));
-    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.25, itemTrailingEdge: 0.55)));
+    expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 0, itemLeadingEdge: -0.05, itemTrailingEdge: 0.05), tolerance));
+    expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 1, itemLeadingEdge: 0.05, itemTrailingEdge: 0.25), tolerance));
+    expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 2, itemLeadingEdge: 0.25, itemTrailingEdge: 0.55), tolerance));
 
     await tester.pump(animationDuration * 0.5);
 
-    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 0, itemTrailingEdge: 0.2)));
-    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.2, itemTrailingEdge: 0.5)));
+    expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 1, itemLeadingEdge: 0, itemTrailingEdge: 0.2), tolerance));
+    expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 2, itemLeadingEdge: 0.2, itemTrailingEdge: 0.5), tolerance));
   });
 
   testWidgets('Linear scroll to not already onscreen of varying height items list', (WidgetTester tester) async {
