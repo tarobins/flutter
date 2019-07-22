@@ -66,6 +66,7 @@ class ListItemScrollController {
 ///    physics [Simulation].
 class ItemDrivenScrollActivity extends ScrollActivity {
 
+  final _InterpolationSimulation _interpolationSimulation;
   final ItemPositionNotifier itemPositionNotifier;
   final ScrollController scrollController;
   final int index;
@@ -93,11 +94,12 @@ class ItemDrivenScrollActivity extends ScrollActivity {
         assert(duration > Duration.zero),
         assert(curve != null),
         initialScrollPosition = scrollPosition.pixels,
+        _interpolationSimulation = _InterpolationSimulation(0, 1, duration, Curves.linear, 1.0),
         super(delegate) {
     _completer = Completer<void>();
     _controller = AnimationController(vsync: vsync, duration: duration);
 //    _value = _controller.drive((Tween<double>(begin: scrollPosition.pixels, end: _estimatedTargetScrollOffsetDelta).chain(CurveTween(curve: curve))));
-    _controller..addListener(_tick)..forward().whenComplete(_end);
+    _controller..addListener(_tick)..animateWith(_interpolationSimulation);
   }
 
   Completer<void> _completer;
@@ -120,19 +122,29 @@ class ItemDrivenScrollActivity extends ScrollActivity {
   double get velocity => _controller.velocity;
 
   void _tick() {
+    if (_atEnd) {
+      _interpolationSimulation.done = true;
+      _end();
+      return;
+    }
 
     if (_line == null) {
 //      _tween = Tween<double>(begin: initialScrollPosition, end: _estimatedTargetScrollOffsetDelta);
       _line = Line(0, initialScrollPosition, 1, _estimatedTargetScrollOffset);
+      curved = curve.transform(_controller.value);
+      offset = _line.eval(curved);
+    } if (_controller.value >= 1) {
+      offset = _estimatedTargetScrollOffset;
     } else {
       final double estimatedTargetScrollOffsetDelta = _estimatedTargetScrollOffset;
 //      final double currentOffset = _line.eval(curved);
       _line = Line(curved, offset, 1, estimatedTargetScrollOffsetDelta);
+      curved = curve.transform(_controller.value);
+      offset = _line.eval(curved);
     }
-    curved = curve.transform(_controller.value);
-    offset = _line.eval(curved);
     if (delegate.setPixels(offset) != 0.0)
       delegate.goIdle();
+
   }
 
   void _end() {
@@ -159,6 +171,15 @@ class ItemDrivenScrollActivity extends ScrollActivity {
 
       return targetScrollOffset;
     }
+  }
+
+  bool get _atEnd {
+    final Iterable<SliverChildPosition> matchingPositions = itemPositionNotifier.itemPositions.value.where((SliverChildPosition sliverChildPosition) => sliverChildPosition.index == index);
+
+    if (matchingPositions.isNotEmpty && matchingPositions.first.itemLeadingEdge.abs() < 0.000001) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -196,4 +217,37 @@ class Line {
 
   @override
   String toString() => '$slope * x + $yIntercept';
+}
+
+class _InterpolationSimulation extends Simulation {
+  _InterpolationSimulation(this._begin, this._durationTarget, Duration duration, this._curve, double scale)
+      : assert(_begin != null),
+        assert(_durationTarget != null),
+        assert(duration != null && duration.inMicroseconds > 0),
+        _durationInSeconds = (duration.inMicroseconds * scale) / Duration.microsecondsPerSecond;
+
+  final double _durationInSeconds;
+  final double _begin;
+  final double _durationTarget;
+  final Curve _curve;
+
+  bool done = false;
+
+  @override
+  double x(double timeInSeconds) {
+    final double t = (timeInSeconds / _durationInSeconds).clamp(0.0, 1.0);
+    if (t == 0.0)
+      return _begin;
+    else
+      return _begin + (_durationTarget - _begin) * _curve.transform(t);
+  }
+
+  @override
+  double dx(double timeInSeconds) {
+    final double epsilon = tolerance.time;
+    return (x(timeInSeconds + epsilon) - x(timeInSeconds - epsilon)) / (2 * epsilon);
+  }
+
+  @override
+  bool isDone(double timeInSeconds) => done;
 }

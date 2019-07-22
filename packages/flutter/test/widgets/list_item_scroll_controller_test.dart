@@ -116,7 +116,7 @@ void main() {
     await tester.pump();
     await tester.pump(animationDuration ~/ 2);
     await tester.pump(animationDuration ~/ 2);
-
+    await tester.pump();
 
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 30, itemLeadingEdge: 0, itemTrailingEdge: 160/200)));
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 31, itemLeadingEdge: 160/200, itemTrailingEdge: (160 + 165) / 200)));
