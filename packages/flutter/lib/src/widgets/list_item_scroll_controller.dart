@@ -102,7 +102,7 @@ class ItemDrivenScrollActivity extends ScrollActivity {
 
   Completer<void> _completer;
   AnimationController _controller;
-  Animation<double> _value;
+//  Animation<double> _value;
 //  Tween<double> _tween;
   Line _line;
   double curved;
@@ -123,15 +123,15 @@ class ItemDrivenScrollActivity extends ScrollActivity {
 
     if (_line == null) {
 //      _tween = Tween<double>(begin: initialScrollPosition, end: _estimatedTargetScrollOffsetDelta);
-      _line = Line(0, initialScrollPosition, 1, _estimatedTargetScrollOffsetDelta);
+      _line = Line(0, initialScrollPosition, 1, _estimatedTargetScrollOffset);
     } else {
-      final double estimatedTargetScrollOffsetDelta = _estimatedTargetScrollOffsetDelta;
+      final double estimatedTargetScrollOffsetDelta = _estimatedTargetScrollOffset;
 //      final double currentOffset = _line.eval(curved);
-      _line = Line(curved, offset, 1, estimatedTargetScrollOffsetDelta + offset);
+      _line = Line(curved, offset, 1, estimatedTargetScrollOffsetDelta);
     }
     curved = curve.transform(_controller.value);
     offset = _line.eval(curved);
-    if (delegate.setPixels(_line.eval(curved)) != 0.0)
+    if (delegate.setPixels(offset) != 0.0)
       delegate.goIdle();
   }
 
@@ -139,7 +139,7 @@ class ItemDrivenScrollActivity extends ScrollActivity {
     delegate?.goBallistic(velocity);
   }
 
-  double get _estimatedTargetScrollOffsetDelta {
+  double get _estimatedTargetScrollOffset {
     final Iterable<SliverChildPosition> matchingPositions = itemPositionNotifier.itemPositions.value.where((SliverChildPosition sliverChildPosition) => sliverChildPosition.index == index);
 
     if (matchingPositions.isNotEmpty) {
@@ -149,7 +149,7 @@ class ItemDrivenScrollActivity extends ScrollActivity {
 
       final double targetScrollOffset = targetItemCurrentPixelEdge - targetPixelOffset;
 
-      return targetScrollOffset;
+      return targetScrollOffset + (offset ?? 0);
     } else {
       final double averageItemHeight = itemPositionNotifier.itemPositions.value.fold(0.0, (double value, SliverChildPosition next) =>
           value + next.itemTrailingEdge - next.itemLeadingEdge) /
@@ -193,4 +193,7 @@ class Line {
       slope = (y2 - y1) / (x2 - x1), yIntercept = y1 - (y2 - y1) / (x2 - x1) * x1;
 
   double eval(double x) => slope * x + yIntercept;
+
+  @override
+  String toString() => '$slope * x + $yIntercept';
 }

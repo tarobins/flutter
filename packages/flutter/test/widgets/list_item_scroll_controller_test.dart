@@ -114,7 +114,9 @@ void main() {
     listItemScrollController.animateTo(30, 0, animationDuration, Curves.linear);
 
     await tester.pump();
-    await tester.pump(animationDuration);
+    await tester.pump(animationDuration ~/ 2);
+    await tester.pump(animationDuration ~/ 2);
+
 
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 30, itemLeadingEdge: 0, itemTrailingEdge: 160/200)));
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 31, itemLeadingEdge: 160/200, itemTrailingEdge: (160 + 165) / 200)));
