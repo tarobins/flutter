@@ -9,9 +9,8 @@ class ListItemScrollController {
 
   final ItemPositionNotifier itemPositionNotifier;
   final ScrollController scrollController;
-  final SliverChildDelegate sliverChildDelegate;
 
-  ListItemScrollController({@required this.itemPositionNotifier, @required this.scrollController, @required this.sliverChildDelegate});
+  ListItemScrollController({@required this.itemPositionNotifier, @required this.scrollController});
 
   Future<void> animateTo(int index, double anchor, Duration duration, Curve curve) {
     final Iterable<SliverChildPosition> matchingPositions = itemPositionNotifier.itemPositions.value.where((SliverChildPosition sliverChildPosition) => sliverChildPosition.index == index);

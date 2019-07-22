@@ -38,7 +38,7 @@ void main() {
             ),
         childCount: itemCount);
     listItemScrollController = ListItemScrollController(
-        scrollController: scrollController, itemPositionNotifier: itemPositionNotifier, sliverChildDelegate: sliverChildBuilderDelegate);
+        scrollController: scrollController, itemPositionNotifier: itemPositionNotifier);
 
     await tester.pumpWidget(
       Directionality(
