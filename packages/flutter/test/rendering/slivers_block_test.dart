@@ -181,7 +181,6 @@ void main() {
     expect(c.localToGlobal(const Offset(0.0, 0.0)), const Offset(0.0, 200.0));
     expect(d.attached, false);
     expect(e.attached, false);
-    expect(itemPositions, hasLength(2));
     expect(itemPositions, contains(
         SliverChildPosition(index: 1, itemLeadingEdge: -1/3, itemTrailingEdge: 1/3)));
     expect(itemPositions, contains(
@@ -195,7 +194,6 @@ void main() {
     expect(c.localToGlobal(const Offset(0.0, 0.0)), const Offset(0.0, -100.0));
     expect(d.localToGlobal(const Offset(0.0, 0.0)), const Offset(0.0, 300.0));
     expect(e.attached, false);
-    expect(itemPositions, hasLength(2));
     expect(itemPositions, contains(
         SliverChildPosition(index: 2, itemLeadingEdge: -1/6, itemTrailingEdge: 1/2)));
     expect(itemPositions, contains(
@@ -209,7 +207,6 @@ void main() {
     expect(c.attached, false);
     expect(d.attached, false);
     expect(e.attached, false);
-    expect(itemPositions, hasLength(2));
     expect(itemPositions, contains(
         SliverChildPosition(index: 0, itemLeadingEdge: -1/3, itemTrailingEdge: 1/3)));
     expect(itemPositions, contains(

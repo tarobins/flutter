@@ -117,9 +117,26 @@ void main() {
     await tester.pump(animationDuration ~/ 2);
     await tester.pump(animationDuration ~/ 2);
     await tester.pump();
+    await tester.pump();
 
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 30, itemLeadingEdge: 0, itemTrailingEdge: 160/200)));
     expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 31, itemLeadingEdge: 160/200, itemTrailingEdge: (160 + 165) / 200)));
+  });
+
+  testWidgets('Big item at beginning', (WidgetTester tester) async {
+    await setUp(tester, itemSize: (i) => i == 1 ? 1000.0 : 10);
+
+    listItemScrollController.animateTo(100, 0, animationDuration, Curves.linear);
+
+    await tester.pump();
+    await tester.pump(animationDuration ~/ 4);
+    await tester.pump(animationDuration ~/ 4);
+    await tester.pump(animationDuration ~/ 4);
+    await tester.pump(animationDuration ~/ 4);
+    await tester.pump();
+    await tester.pump();
+
+    expect(itemPositionNotifier.itemPositions.value, contains(SliverChildPosition(index: 100, itemLeadingEdge: 0, itemTrailingEdge: 10/200)));
   });
 }
 

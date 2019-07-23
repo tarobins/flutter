@@ -120,19 +120,21 @@ class ItemDrivenScrollActivity extends ScrollActivity {
   @override
   double get velocity => _controller.velocity;
 
+  bool exact = false;
+
   void _tick() {
     if (_atEnd) {
       _interpolationSimulation.done = true;
       _end();
       return;
     }
-
+    double oldOffset = offset ?? 0;
     if (_line == null) {
 //      _tween = Tween<double>(begin: initialScrollPosition, end: _estimatedTargetScrollOffsetDelta);
       _line = Line(0, initialScrollPosition, 1, _estimatedTargetScrollOffset);
       curved = curve.transform(_controller.value);
       offset = _line.eval(curved);
-    } if (_controller.value >= 1) {
+    } else if (_controller.value >= 1) {
       offset = _estimatedTargetScrollOffset;
     } else {
       final double estimatedTargetScrollOffsetDelta = _estimatedTargetScrollOffset;
@@ -141,6 +143,7 @@ class ItemDrivenScrollActivity extends ScrollActivity {
       curved = curve.transform(_controller.value);
       offset = _line.eval(curved);
     }
+    print('********* estimate: $_estimatedTargetScrollOffset scrolling from: $oldOffset to: $offset delta: ${offset - oldOffset} exact: $exact');
     if (delegate.setPixels(offset) != 0.0)
       delegate.goIdle();
 
@@ -151,9 +154,11 @@ class ItemDrivenScrollActivity extends ScrollActivity {
   }
 
   double get _estimatedTargetScrollOffset {
-    final Iterable<SliverChildPosition> matchingPositions = itemPositionNotifier.itemPositions.value.where((SliverChildPosition sliverChildPosition) => sliverChildPosition.index == index);
+    final Iterable<SliverChildPosition> matchingPositions = itemPositionNotifier.itemPositions.value.where((SliverChildPosition sliverChildPosition) => sliverChildPosition.index == index).toList();
 
     if (matchingPositions.isNotEmpty) {
+//      print('*********** exact');
+      exact = true;
       SliverChildPosition targetItemPosition = matchingPositions.first;
       final double targetItemCurrentPixelEdge = targetItemPosition.itemLeadingEdge * scrollController.position.viewportDimension;
       final double targetPixelOffset = anchor * scrollController.position.viewportDimension;
@@ -162,6 +167,8 @@ class ItemDrivenScrollActivity extends ScrollActivity {
 
       return targetScrollOffset + (offset ?? 0);
     } else {
+//      print('*********** estimate');
+      exact = false;
       final double averageItemHeight = itemPositionNotifier.itemPositions.value.fold(0.0, (double value, SliverChildPosition next) =>
           value + next.itemTrailingEdge - next.itemLeadingEdge) /
               itemPositionNotifier.itemPositions.value.length * scrollController.position.viewportDimension;

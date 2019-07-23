@@ -227,7 +227,6 @@ class RenderSliverList extends RenderSliverMultiBoxAdaptor {
     // Find the first child that ends after the scroll offset.
     while (endScrollOffset < scrollOffset) {
       leadingGarbage += 1;
-      childrenData.removeLast();
       if (!advance()) {
         assert(leadingGarbage == childCount);
         assert(child == null);
