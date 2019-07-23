@@ -239,6 +239,7 @@ class RenderSliverList extends RenderSliverMultiBoxAdaptor {
           paintExtent: 0.0,
           maxPaintExtent: extent,
         );
+        itemPositionCallback?.call(childrenData);
         return;
       }
     }
