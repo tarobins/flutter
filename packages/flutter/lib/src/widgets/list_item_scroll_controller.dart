@@ -5,6 +5,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
+const double alpha = 0.2;
+
 class ListItemScrollController {
 
   final ItemPositionNotifier itemPositionNotifier;
@@ -123,6 +125,8 @@ class ItemDrivenScrollActivity extends ScrollActivity {
   bool exact = false;
 
   void _tick() {
+    final etso = _estimatedTargetScrollOffset;
+
     if (_atEnd) {
       _interpolationSimulation.done = true;
       _end();
@@ -131,19 +135,19 @@ class ItemDrivenScrollActivity extends ScrollActivity {
     double oldOffset = offset ?? 0;
     if (_line == null) {
 //      _tween = Tween<double>(begin: initialScrollPosition, end: _estimatedTargetScrollOffsetDelta);
-      _line = Line(0, initialScrollPosition, 1, _estimatedTargetScrollOffset);
+      _line = Line(0, initialScrollPosition, 1, etso);
       curved = curve.transform(_controller.value);
       offset = _line.eval(curved);
     } else if (_controller.value >= 1) {
-      offset = _estimatedTargetScrollOffset;
+      offset = etso;
     } else {
-      final double estimatedTargetScrollOffsetDelta = _estimatedTargetScrollOffset;
+      final double estimatedTargetScrollOffsetDelta = etso;
 //      final double currentOffset = _line.eval(curved);
       _line = Line(curved, offset, 1, estimatedTargetScrollOffsetDelta);
       curved = curve.transform(_controller.value);
       offset = _line.eval(curved);
     }
-    print('********* estimate: $_estimatedTargetScrollOffset scrolling from: $oldOffset to: $offset delta: ${offset - oldOffset} exact: $exact');
+    print('********* estimate: $etso scrolling from: $oldOffset to: $offset delta: ${offset - oldOffset} exact: $exact');
     if (delegate.setPixels(offset) != 0.0)
       delegate.goIdle();
 
@@ -163,19 +167,19 @@ class ItemDrivenScrollActivity extends ScrollActivity {
       final double targetItemCurrentPixelEdge = targetItemPosition.itemLeadingEdge * scrollController.position.viewportDimension;
       final double targetPixelOffset = anchor * scrollController.position.viewportDimension;
 
-      final double targetScrollOffset = targetItemCurrentPixelEdge - targetPixelOffset;
+      final double targetScrollOffsetDelta = targetItemCurrentPixelEdge - targetPixelOffset;
 
-      return targetScrollOffset + (offset ?? 0);
+      return targetScrollOffsetDelta + (offset ?? 0);
     } else {
-//      print('*********** estimate');
       exact = false;
       final double averageItemHeight = itemPositionNotifier.itemPositions.value.fold(0.0, (double value, SliverChildPosition next) =>
           value + next.itemTrailingEdge - next.itemLeadingEdge) /
               itemPositionNotifier.itemPositions.value.length * scrollController.position.viewportDimension;
+      print('*********** estimate avg height: $averageItemHeight');
 
       final double targetScrollOffset = index * averageItemHeight;
 
-      return targetScrollOffset;
+      return alpha * (offset ?? 0) + (1 - alpha) * targetScrollOffset;
     }
   }
 

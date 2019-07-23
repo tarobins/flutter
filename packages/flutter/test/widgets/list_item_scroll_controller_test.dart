@@ -85,6 +85,7 @@ void main() {
 
     await tester.pump();
     await tester.pump(animationDuration);
+    await tester.pump();
 
     expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 30, itemLeadingEdge: 0, itemTrailingEdge: 0.1), tolerance));
     expect(itemPositionNotifier.itemPositions.value, closeToPosition(SliverChildPosition(index: 31, itemLeadingEdge: 0.1, itemTrailingEdge: 0.2), tolerance));
