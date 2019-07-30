@@ -298,8 +298,8 @@ abstract class RenderSliverFixedExtentBoxAdaptor extends RenderSliverMultiBoxAda
 
     itemPositionCallback?.call(List<SliverChildPosition>.generate(
         lastIndex - firstIndex + 1,
-            (i) => SliverChildPosition(index: i + firstIndex, itemLeadingEdge: (leadingScrollOffset - constraints.scrollOffset + i * itemExtent) / constraints.viewportMainAxisExtent,
-                itemTrailingEdge: (leadingScrollOffset - constraints.scrollOffset + (i + 1) * itemExtent) / constraints.viewportMainAxisExtent),
+            (i) => SliverChildPosition(index: i + firstIndex, itemLeadingEdge: (leadingScrollOffset + i * itemExtent),
+                itemTrailingEdge: (leadingScrollOffset + (i + 1) * itemExtent)),
     ));
 
     // We may have started the layout while scrolled to the end, which would not

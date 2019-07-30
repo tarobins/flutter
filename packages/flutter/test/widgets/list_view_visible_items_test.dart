@@ -29,9 +29,9 @@ void main() {
       ),
     );
 
-    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 0, itemLeadingEdge: 0, itemTrailingEdge: 0.1)));
-    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 0.1, itemTrailingEdge: 0.3)));
-    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.3, itemTrailingEdge: 0.6)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 0, itemLeadingEdge: 0, itemTrailingEdge: 20)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 20, itemTrailingEdge: 60)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 60, itemTrailingEdge: 120)));
   });
 
   testWidgets('List positions of scrolled list', (WidgetTester tester) async {
@@ -59,9 +59,9 @@ void main() {
     await tester.drag(find.byType(ListView), const Offset(0, -20));
     await tester.pump();
 
-    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 0, itemTrailingEdge: 0.2)));
-    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.2, itemTrailingEdge: 0.5)));
-    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 3, itemLeadingEdge: 0.5, itemTrailingEdge: 0.9)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 20, itemTrailingEdge: 60)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 60, itemTrailingEdge: 120)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 3, itemLeadingEdge: 120, itemTrailingEdge: 200)));
   });
 
   testWidgets('List positions of builder list', (WidgetTester tester) async {
@@ -84,8 +84,8 @@ void main() {
       ),
     );
 
-    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 0, itemLeadingEdge: 0, itemTrailingEdge: 0.1)));
-    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 0.1, itemTrailingEdge: 0.3)));
-    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 0.3, itemTrailingEdge: 0.6)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 0, itemLeadingEdge: 0, itemTrailingEdge: 20)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 1, itemLeadingEdge: 20, itemTrailingEdge: 60)));
+    expect(itemScrollController.itemPositions.value, contains(SliverChildPosition(index: 2, itemLeadingEdge: 60, itemTrailingEdge: 120)));
   });
 }

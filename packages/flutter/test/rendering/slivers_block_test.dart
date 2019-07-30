@@ -147,9 +147,9 @@ void main() {
     expect(e.attached, false);
     expect(itemPositions, hasLength(2));
     expect(itemPositions, contains(
-        SliverChildPosition(index: 0, itemLeadingEdge: 0, itemTrailingEdge: 2/3)));
+        SliverChildPosition(index: 0, itemLeadingEdge: 0, itemTrailingEdge: 400)));
     expect(itemPositions, contains(
-        SliverChildPosition(index: 1, itemLeadingEdge: 2/3, itemTrailingEdge: 4/3)));
+        SliverChildPosition(index: 1, itemLeadingEdge: 400, itemTrailingEdge: 800)));
 
     // make sure that layout is stable by laying out again
     inner.markNeedsLayout();
@@ -170,9 +170,9 @@ void main() {
     expect(e.attached, false);
     expect(itemPositions, hasLength(2));
     expect(itemPositions, contains(
-        SliverChildPosition(index: 0, itemLeadingEdge: -1/3, itemTrailingEdge: 1/3)));
+        SliverChildPosition(index: 0, itemLeadingEdge: 0, itemTrailingEdge: 400)));
     expect(itemPositions, contains(
-        SliverChildPosition(index: 1, itemLeadingEdge: 1/3, itemTrailingEdge: 1)));
+        SliverChildPosition(index: 1, itemLeadingEdge: 400, itemTrailingEdge: 800)));
 
     root.offset = ViewportOffset.fixed(600.0);
     pumpFrame();
@@ -182,9 +182,9 @@ void main() {
     expect(d.attached, false);
     expect(e.attached, false);
     expect(itemPositions, contains(
-        SliverChildPosition(index: 1, itemLeadingEdge: -1/3, itemTrailingEdge: 1/3)));
+        SliverChildPosition(index: 1, itemLeadingEdge: 400, itemTrailingEdge: 800)));
     expect(itemPositions, contains(
-        SliverChildPosition(index: 2, itemLeadingEdge: 1/3, itemTrailingEdge: 1)));
+        SliverChildPosition(index: 2, itemLeadingEdge: 800, itemTrailingEdge: 1200)));
 
 
     root.offset = ViewportOffset.fixed(900.0);
@@ -195,9 +195,9 @@ void main() {
     expect(d.localToGlobal(const Offset(0.0, 0.0)), const Offset(0.0, 300.0));
     expect(e.attached, false);
     expect(itemPositions, contains(
-        SliverChildPosition(index: 2, itemLeadingEdge: -1/6, itemTrailingEdge: 1/2)));
+        SliverChildPosition(index: 2, itemLeadingEdge: 800, itemTrailingEdge: 1200)));
     expect(itemPositions, contains(
-        SliverChildPosition(index: 3, itemLeadingEdge: 1/2, itemTrailingEdge: 7/6)));
+        SliverChildPosition(index: 3, itemLeadingEdge: 1200, itemTrailingEdge: 1600)));
 
     // try going back up
     root.offset = ViewportOffset.fixed(200.0);
@@ -208,9 +208,9 @@ void main() {
     expect(d.attached, false);
     expect(e.attached, false);
     expect(itemPositions, contains(
-        SliverChildPosition(index: 0, itemLeadingEdge: -1/3, itemTrailingEdge: 1/3)));
+        SliverChildPosition(index: 0, itemLeadingEdge: 0, itemTrailingEdge: 400)));
     expect(itemPositions, contains(
-        SliverChildPosition(index: 1, itemLeadingEdge: 1/3, itemTrailingEdge: 1)));
+        SliverChildPosition(index: 1, itemLeadingEdge: 400, itemTrailingEdge: 800)));
   });
 
   test('RenderSliverList basic test - up', () {
