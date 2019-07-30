@@ -2,6 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
 import 'basic.dart';
@@ -55,6 +58,7 @@ class Viewport extends MultiChildRenderObjectWidget {
     this.crossAxisDirection,
     this.anchor = 0.0,
     @required this.offset,
+    this.sliverPositionNotifier,
     this.center,
     this.cacheExtent,
     List<Widget> slivers = const <Widget>[],
@@ -112,6 +116,8 @@ class Viewport extends MultiChildRenderObjectWidget {
   /// {@macro flutter.rendering.viewport.cacheExtent}
   final double cacheExtent;
 
+  final SliverPositionNotifier sliverPositionNotifier;
+
   /// Given a [BuildContext] and an [AxisDirection], determine the correct cross
   /// axis direction.
   ///
@@ -140,6 +146,7 @@ class Viewport extends MultiChildRenderObjectWidget {
       anchor: anchor,
       offset: offset,
       cacheExtent: cacheExtent,
+      sliverPositionCallback: (Iterable<SliverPosition> itemPositions) => scheduleMicrotask(() => sliverPositionNotifier?._sliverPositions?.value = itemPositions),
     );
   }
 
@@ -169,6 +176,12 @@ class Viewport extends MultiChildRenderObjectWidget {
       properties.add(DiagnosticsProperty<Key>('center', children.first.key, tooltip: 'implicit'));
     }
   }
+}
+
+class SliverPositionNotifier {
+  final ValueNotifier<Iterable<SliverPosition>> _sliverPositions = ValueNotifier([]);
+
+  ValueListenable<Iterable<SliverPosition>> get sliverPositions => _sliverPositions;
 }
 
 class _ViewportElement extends MultiChildRenderObjectElement {

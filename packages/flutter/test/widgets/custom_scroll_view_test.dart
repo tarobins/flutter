@@ -3,11 +3,14 @@
 // found in the LICENSE file.
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+final ScrollController sc = ScrollController();
 
 void main() {
-  testWidgets('CustomScrollView.center', (WidgetTester tester) async {
-    await tester.pumpWidget(const Directionality(
+  testWidgets('CustomScrollView.center a', (WidgetTester tester) async {
+    SliverPositionNotifier sliverPositionNotifier = SliverPositionNotifier();
+    await tester.pumpWidget(Directionality(
       textDirection: TextDirection.ltr,
       child: CustomScrollView(
         slivers: <Widget>[
@@ -15,16 +18,19 @@ void main() {
           SliverToBoxAdapter(key: Key('b'), child: SizedBox(height: 100.0)),
         ],
         center: Key('a'),
+        sliverPositionNotifier: sliverPositionNotifier,
       ),
     ));
     await tester.pumpAndSettle();
     expect(tester.getRect(find.descendant(of: find.byKey(const Key('a')), matching: find.byType(SizedBox))),
-           const Rect.fromLTRB(0.0, 0.0, 800.0, 100.0));
+        const Rect.fromLTRB(0.0, 0.0, 800.0, 100.0));
     expect(tester.getRect(find.descendant(of: find.byKey(const Key('b')), matching: find.byType(SizedBox))),
-           const Rect.fromLTRB(0.0, 100.0, 800.0, 200.0));
+        const Rect.fromLTRB(0.0, 100.0, 800.0, 200.0));
+    expect(sliverPositionNotifier.sliverPositions.value, contains(SliverPosition(index: 0, itemLeadingEdge: 0, itemTrailingEdge: 100)));
+    expect(sliverPositionNotifier.sliverPositions.value, contains(SliverPosition(index: 1, itemLeadingEdge: 100, itemTrailingEdge: 200)));
   });
 
-  testWidgets('CustomScrollView.center', (WidgetTester tester) async {
+  testWidgets('CustomScrollView.center b', (WidgetTester tester) async {
     await tester.pumpWidget(const Directionality(
       textDirection: TextDirection.ltr,
       child: CustomScrollView(

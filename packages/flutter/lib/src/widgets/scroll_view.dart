@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:math' as math;
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/gestures.dart';
@@ -64,6 +64,7 @@ abstract class ScrollView extends StatelessWidget {
     this.scrollDirection = Axis.vertical,
     this.reverse = false,
     this.controller,
+    this.sliverPositionNotifier,
     bool primary,
     ScrollPhysics physics,
     this.shrinkWrap = false,
@@ -119,6 +120,8 @@ abstract class ScrollView extends StatelessWidget {
   /// scroll position (see [ScrollController.offset]), or change it (see
   /// [ScrollController.animateTo]).
   final ScrollController controller;
+
+  final SliverPositionNotifier sliverPositionNotifier;
 
   /// Whether this is the primary scroll view associated with the parent
   /// [PrimaryScrollController].
@@ -290,6 +293,7 @@ abstract class ScrollView extends StatelessWidget {
       cacheExtent: cacheExtent,
       center: center,
       anchor: anchor,
+      sliverPositionNotifier: sliverPositionNotifier,
     );
   }
 
@@ -448,6 +452,7 @@ class CustomScrollView extends ScrollView {
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     ScrollController controller,
+    SliverPositionNotifier sliverPositionNotifier,
     bool primary,
     ScrollPhysics physics,
     bool shrinkWrap = false,
@@ -462,6 +467,7 @@ class CustomScrollView extends ScrollView {
     scrollDirection: scrollDirection,
     reverse: reverse,
     controller: controller,
+    sliverPositionNotifier: sliverPositionNotifier,
     primary: primary,
     physics: physics,
     shrinkWrap: shrinkWrap,

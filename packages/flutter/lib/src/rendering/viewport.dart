@@ -132,6 +132,37 @@ class RevealedOffset {
   }
 }
 
+/// The position of a item within a [RenderSliverMultiBoxAdaptor].
+class SliverPosition {
+  /// Index of the item.
+  final int index;
+
+  /// Distance as a proportion of the length of the viewport from the leading
+  /// edge of the viewport to the leading edge of the item.
+  final double itemLeadingEdge;
+  /// Distance as a proportion of the length of the viewport from the leading
+  /// edge of the viewport to the trailing edge of the item.
+  final double itemTrailingEdge;
+
+  SliverPosition({@required this.index, @required this.itemLeadingEdge, @required this.itemTrailingEdge});
+
+  @override
+  bool operator ==(dynamic other) {
+    if (other.runtimeType != runtimeType)
+      return false;
+    final SliverPosition otherPosition = other;
+    return otherPosition.index == index
+        && otherPosition.itemLeadingEdge == itemLeadingEdge
+        && otherPosition.itemTrailingEdge == itemTrailingEdge;
+  }
+
+  @override
+  int get hashCode => 31 * (31 * (7 + index.hashCode) + itemLeadingEdge.hashCode) + itemTrailingEdge.hashCode;
+
+  @override
+  String toString() => 'SliverChildPosition(index: $index, itemLeadingEdge: $itemLeadingEdge, itemTrailingEdge: $itemTrailingEdge)';
+}
+
 /// A base class for render objects that are bigger on the inside.
 ///
 /// This render object provides the shared code for render objects that host
@@ -159,6 +190,7 @@ abstract class RenderViewportBase<ParentDataClass extends ContainerParentDataMix
     AxisDirection axisDirection = AxisDirection.down,
     @required AxisDirection crossAxisDirection,
     @required ViewportOffset offset,
+    this.sliverPositionCallback,
     double cacheExtent,
   }) : assert(axisDirection != null),
        assert(crossAxisDirection != null),
@@ -168,6 +200,8 @@ abstract class RenderViewportBase<ParentDataClass extends ContainerParentDataMix
        _crossAxisDirection = crossAxisDirection,
        _offset = offset,
        _cacheExtent = cacheExtent ?? RenderAbstractViewport.defaultCacheExtent;
+  
+  final SliverPositionCallback sliverPositionCallback;
 
   @override
   void describeSemanticsConfiguration(SemanticsConfiguration config) {
@@ -1007,6 +1041,8 @@ abstract class RenderViewportBase<ParentDataClass extends ContainerParentDataMix
   }
 }
 
+typedef SliverPositionCallback = Function(Iterable<SliverPosition> sliverPositions);
+
 /// A render object that is bigger on the inside.
 ///
 /// [RenderViewport] is the visual workhorse of the scrolling machinery. It
@@ -1054,11 +1090,12 @@ class RenderViewport extends RenderViewportBase<SliverPhysicalContainerParentDat
     List<RenderSliver> children,
     RenderSliver center,
     double cacheExtent,
+    SliverPositionCallback sliverPositionCallback,
   }) : assert(anchor != null),
        assert(anchor >= 0.0 && anchor <= 1.0),
        _anchor = anchor,
        _center = center,
-       super(axisDirection: axisDirection, crossAxisDirection: crossAxisDirection, offset: offset, cacheExtent: cacheExtent) {
+       super(axisDirection: axisDirection, crossAxisDirection: crossAxisDirection, offset: offset, cacheExtent: cacheExtent, sliverPositionCallback: sliverPositionCallback) {
     addAll(children);
     if (center == null && firstChild != null)
       _center = firstChild;
@@ -1256,8 +1293,18 @@ class RenderViewport extends RenderViewportBase<SliverPhysicalContainerParentDat
         if (offset.applyContentDimensions(
               math.min(0.0, _minScrollExtent + mainAxisExtent * anchor),
               math.max(0.0, _maxScrollExtent - mainAxisExtent * (1.0 - anchor)),
-           ))
+           )) {
+          RenderSliver child = firstChild;
+          final sliverPositions = <SliverPosition>[];
+          var index = 0;
+          while (child != null) {
+            SliverPhysicalContainerParentData parentData = child.parentData;
+            sliverPositions.add(SliverPosition(index: index++, itemLeadingEdge: parentData.paintOffset.dy, itemTrailingEdge: parentData.paintOffset.dy + child.geometry.layoutExtent));
+            child = parentData.nextSibling;
+          }
+          sliverPositionCallback?.call(sliverPositions);
           break;
+        }
       }
       count += 1;
     } while (count < _maxLayoutCycles);
