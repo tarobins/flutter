@@ -164,11 +164,11 @@ class SliverChildPosition {
   /// Index of the item.
   final int index;
 
-  /// Distance as a proportion of the length of the viewport from the leading
-  /// edge of the viewport to the leading edge of the item.
+  /// Distance in pixels from the leading edge of this item to the leading edge
+  /// of its containing sliver.
   final double itemLeadingEdge;
-  /// Distance as a proportion of the length of the viewport from the leading
-  /// edge of the viewport to the trailing edge of the item.
+  /// Distance in pixels from the trailing edge of this item to the leading edge
+  /// of its containing sliver.
   final double itemTrailingEdge;
 
   SliverChildPosition({@required this.index, @required this.itemLeadingEdge, @required this.itemTrailingEdge});

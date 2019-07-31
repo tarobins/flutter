@@ -132,16 +132,16 @@ class RevealedOffset {
   }
 }
 
-/// The position of a item within a [RenderSliverMultiBoxAdaptor].
+/// The position of a item within a [RenderViewport].
 class SliverPosition {
-  /// Index of the item.
+  /// Index of the sliver.
   final int index;
 
-  /// Distance as a proportion of the length of the viewport from the leading
-  /// edge of the viewport to the leading edge of the item.
+  /// Distance in pixels from the leading edge of the sliver to the leading edge
+  /// of the viewport.
   final double itemLeadingEdge;
-  /// Distance as a proportion of the length of the viewport from the leading
-  /// edge of the viewport to the trailing edge of the item.
+  /// Distance in pixels from the trailing edge of the sliver to the leading
+  /// edge of the viewport.
   final double itemTrailingEdge;
 
   SliverPosition({@required this.index, @required this.itemLeadingEdge, @required this.itemTrailingEdge});
