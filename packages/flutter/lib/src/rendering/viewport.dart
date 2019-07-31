@@ -1257,6 +1257,7 @@ class RenderViewport extends RenderViewportBase<SliverPhysicalContainerParentDat
 
   @override
   void performLayout() {
+//    print('Layout');
     if (center == null) {
       assert(firstChild == null);
       _minScrollExtent = 0.0;
@@ -1299,7 +1300,7 @@ class RenderViewport extends RenderViewportBase<SliverPhysicalContainerParentDat
           var index = 0;
           while (child != null) {
             SliverPhysicalContainerParentData parentData = child.parentData;
-            sliverPositions.add(SliverPosition(index: index++, itemLeadingEdge: parentData.paintOffset.dy, itemTrailingEdge: parentData.paintOffset.dy + child.geometry.layoutExtent));
+            sliverPositions.add(SliverPosition(index: index++, itemLeadingEdge: parentData.paintOffset.dy - child.constraints.scrollOffset, itemTrailingEdge: parentData.paintOffset.dy + child.geometry.layoutExtent  - child.constraints.scrollOffset));
             child = parentData.nextSibling;
           }
           sliverPositionCallback?.call(sliverPositions);
